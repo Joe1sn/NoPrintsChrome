@@ -1,0 +1,57 @@
+{
+    "action": {},
+    "background": {
+        "service_worker": "worker.js"
+    },
+    "content_scripts": [
+        {
+            "all_frames": true,
+            "js": [
+                "inject/main.js"
+            ],
+            "match_about_blank": true,
+            "match_origin_as_fallback": true,
+            "matches": [
+                "*://*/*"
+            ],
+            "run_at": "document_start",
+            "world": "MAIN"
+        },
+        {
+            "all_frames": true,
+            "js": [
+                "inject/isolated.js"
+            ],
+            "match_about_blank": true,
+            "match_origin_as_fallback": true,
+            "matches": [
+                "*://*/*"
+            ],
+            "run_at": "document_start",
+            "world": "ISOLATED"
+        }
+    ],
+    "description": "Prevent HTML canvas element from generating a unique identification key to protect user's privacy",
+    "host_permissions": [
+        "*://*/*"
+    ],
+    "icons": {
+        "128": "icons/128.png",
+        "16": "icons/16.png",
+        "256": "icons/256.png",
+        "32": "icons/32.png",
+        "48": "icons/48.png",
+        "512": "icons/512.png",
+        "64": "icons/64.png"
+    },
+    "manifest_version": 3,
+    "name": "Canvas Chaos - Anti OSINT Fishing",
+    "permissions": [
+        "notifications",
+        "storage",
+        "contextMenus",
+        "scripting",
+        "declarativeNetRequestWithHostAccess"
+    ],
+    "version": "0.0.1"
+}
