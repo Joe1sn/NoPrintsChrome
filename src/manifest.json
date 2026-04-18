@@ -31,7 +31,7 @@
             "world": "ISOLATED"
         }
     ],
-    "description": "Prevent HTML canvas element from generating a unique identification key to protect user's privacy",
+    "description": "Prevent OSINT phishing attacks by blocking canvas/webGL/AudioContext/Font fingerprinting.",
     "host_permissions": [
         "*://*/*"
     ],

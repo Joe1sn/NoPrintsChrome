@@ -1,7 +1,7 @@
 {
   const port = document.createElement('div');
   port.id = 'cc-blck-fp';
-  port.dataset.enabled = 'true'; // ✅ 默认开启
+  port.dataset.enabled = 'true'; // 默认开启
   document.documentElement.appendChild(port);
 
   // ====== 固定 seed（关键）======
@@ -233,6 +233,37 @@
           return Reflect.apply(target, self, args);
         }
       });
+
+      function noise(i) {
+        // 简单伪随机（稳定）
+        let x = Math.sin(i + seed) * 10000;
+        return x - Math.floor(x);
+      }
+
+      function hookReadPixels(proto) {
+        const original = proto.readPixels;
+
+        Object.defineProperty(proto, "readPixels", {
+          value: function (...args) {
+            const pixels = args[args.length - 1];
+
+            // 调用原始
+            original.apply(this, args);
+
+            if (pixels && pixels.length) {
+              for (let i = 0; i < pixels.length; i++) {
+                // 微扰（非常关键：不能太大）
+                pixels[i] = (pixels[i] + Math.floor(noise(i) * 3)) & 0xff;
+              }
+            }
+          }
+        });
+      }
+
+      hookReadPixels(WebGLRenderingContext.prototype);
+      if (window.WebGL2RenderingContext) {
+        hookReadPixels(WebGL2RenderingContext.prototype);
+      }
     }
 
     hookGL(WebGLRenderingContext.prototype);
